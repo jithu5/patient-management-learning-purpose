@@ -1,0 +1,31 @@
+
+services:
+  patient-db:
+    image: postgres:16
+    container_name: patient-db
+    environment:
+      POSTGRES_DB: patientdb
+      POSTGRES_USER: abijith
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    networks:
+      - patient-network
+
+  patient-app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://patient-db:5432/patientdb
+      SPRING_DATASOURCE_USERNAME: abijith
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - patient-db
+    networks:
+      - patient-network
+
+networks:
+  patient-network:
