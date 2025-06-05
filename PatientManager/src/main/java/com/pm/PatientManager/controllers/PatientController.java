@@ -26,11 +26,8 @@ public class PatientController {
 
     @PostMapping("/create")
     public ResponseEntity<PatientResponseDto> createPatient(@Valid @RequestBody PatientRequestDto newPatient){
-        try {
-            PatientResponseDto patient =  patientService.createPatient(newPatient);
-            return ResponseEntity.ok().body(patient);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+
+        PatientResponseDto patient = patientService.createPatient(newPatient);
+        return ResponseEntity.ok().body(patient);
     }
 }
