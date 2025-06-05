@@ -3,12 +3,15 @@ package com.pm.PatientManager.service;
 import com.pm.PatientManager.dto.PatientRequestDto;
 import com.pm.PatientManager.dto.PatientResponseDto;
 import com.pm.PatientManager.exception.EmailAlreadyExistException;
+import com.pm.PatientManager.exception.PatientNotFoundException;
 import com.pm.PatientManager.mapper.PatientMapper;
 import com.pm.PatientManager.models.Patient;
 import com.pm.PatientManager.repository.PatientRepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PatientService {
@@ -32,5 +35,19 @@ public class PatientService {
         Patient newPatient = patientRepo.save(
                 PatientMapper.toModel(patientRequestDTO));
         return  PatientMapper.toDTO(newPatient);
+    }
+
+    public PatientResponseDto updatePatient(UUID id, PatientRequestDto patientRequestDto){
+        Patient patient = patientRepo.findById(id).orElseThrow(
+                ()-> new PatientNotFoundException("Patient not exists by id ")
+        );
+
+        patient.setName(patientRequestDto.getName());
+        patient.setEmail(patientRequestDto.getEmail());
+        patient.setAddress(patientRequestDto.getAddress());
+        patient.setDateOfBirth(LocalDate.parse(patientRequestDto.getDateOfBirth()));
+
+        Patient updatedPatient = patientRepo.save(patient);
+        return PatientMapper.toDTO(updatedPatient);
     }
 }
