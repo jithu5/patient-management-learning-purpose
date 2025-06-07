@@ -14,7 +14,7 @@ services:
 
   patient-app:
     build:
-      context: ./
+      context: PatientManager
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
@@ -24,6 +24,18 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
     depends_on:
       - patient-db
+    networks:
+      - patient-network
+
+  billing-service:
+    build:
+      context: billing-service
+      dockerfile: Dockerfile
+    ports:
+      - "4001:4001"  # REST
+      - "9001:9001"  # gRPC
+    depends_on:
+      - patient-app
     networks:
       - patient-network
 

@@ -19,7 +19,7 @@ FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
 # Copy only the built JAR from the builder stage
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder ./app/target/ ./app
 
 # Run the JAR
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.PatientManager-0.0.1-SNAPSHOT.jar"]
